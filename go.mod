@@ -38,8 +38,8 @@ require (
 	github.com/dgryski/go-farm v0.0.0-20240924180020-3414d57e47da // indirect
 	github.com/dgryski/go-metro v0.0.0-20250106013310-edb8663e5e33 // indirect
 	github.com/dunglas/httpsfv v1.1.0 // indirect
-	github.com/flynn/noise v1.0.1-0.20220214164934-d803f5c4b0f4 // indirect
-	github.com/fxamacker/cbor/v2 v2.5.0 // indirect
+	github.com/flynn/noise v1.1.0 // indirect
+	github.com/fxamacker/cbor/v2 v2.7.0 // indirect
 	github.com/go-ole/go-ole v1.3.0 // indirect
 	github.com/golang/groupcache v0.0.0-20210331224755-41bb18bfe9da // indirect
 	github.com/golang/protobuf v1.5.4 // indirect
@@ -47,31 +47,31 @@ require (
 	github.com/google/gopacket v1.1.19 // indirect
 	github.com/google/nftables v0.1.1-0.20230115205135-9aa6fdf5a28c // indirect
 	github.com/grafov/m3u8 v0.0.0-20171211212457-6ab8f28ed427 // indirect
-	github.com/huin/goupnp v1.2.0 // indirect
+	github.com/huin/goupnp v1.3.0 // indirect
 	github.com/jackpal/go-nat-pmp v1.0.2 // indirect
 	github.com/josharian/native v1.1.1-0.20230202152459-5c7d0dd6ab86 // indirect
 	github.com/jsimonetti/rtnetlink v1.3.5 // indirect
 	github.com/kamstrup/intmap v0.5.2 // indirect
-	github.com/koron/go-ssdp v0.0.4 // indirect
+	github.com/koron/go-ssdp v0.9.1 // indirect
 	github.com/libp2p/go-nat v1.0.1-0.20250821073202-01afc089f138 // indirect
-	github.com/libp2p/go-netroute v0.2.1 // indirect
+	github.com/libp2p/go-netroute v0.4.0 // indirect
 	github.com/libp2p/go-reuseport v0.4.0 // indirect
 	github.com/marusama/semaphore v0.0.0-20171214154724-565ffd8e868a // indirect
 	github.com/mdlayher/netlink v1.7.2 // indirect
-	github.com/mdlayher/socket v0.5.0 // indirect
+	github.com/mdlayher/socket v0.5.1 // indirect
 	github.com/mroth/weightedrand v1.0.0 // indirect
 	github.com/oschwald/maxminddb-golang v1.12.0 // indirect
 	github.com/patrickmn/go-cache v2.1.0+incompatible // indirect
-	github.com/pion/datachannel v1.6.0 // indirect
+	github.com/pion/datachannel v1.6.2 // indirect
 	github.com/pion/dtls/v2 v2.2.7 // indirect
-	github.com/pion/interceptor v0.1.44 // indirect
+	github.com/pion/interceptor v0.1.47 // indirect
 	github.com/pion/mdns/v2 v2.1.0 // indirect
 	github.com/pion/randutil v0.1.0 // indirect
-	github.com/pion/rtcp v1.2.16 // indirect
-	github.com/pion/rtp v1.10.1 // indirect
-	github.com/pion/sctp v1.9.2 // indirect
-	github.com/pion/sdp/v3 v3.0.18 // indirect
-	github.com/pion/srtp/v3 v3.0.10 // indirect
+	github.com/pion/rtcp v1.2.17 // indirect
+	github.com/pion/rtp v1.10.5 // indirect
+	github.com/pion/sctp v1.11.1 // indirect
+	github.com/pion/sdp/v3 v3.0.19 // indirect
+	github.com/pion/srtp/v3 v3.0.13 // indirect
 	github.com/pion/stun v0.6.1 // indirect
 	github.com/pion/transport/v2 v2.2.3 // indirect
 	github.com/pion/turn/v4 v4.1.4 // indirect
@@ -100,7 +100,6 @@ require (
 
 require (
 	github.com/Diniboy1123/usque v0.0.0
-	github.com/urnetwork/sdk v0.0.0
 	github.com/amnezia-vpn/amneziawg-go/v3 v3.1.20260814
 	github.com/andybalholm/brotli v1.1.1 // indirect
 	github.com/apernet/quic-go v0.61.1-0.20260806010916-184d081eef3e // indirect
@@ -124,6 +123,7 @@ require (
 	github.com/robfig/cron/v3 v3.0.1 // indirect
 	github.com/sagernet/sing v0.5.1 // indirect
 	github.com/sagernet/sing-shadowsocks v0.2.7 // indirect
+	github.com/urnetwork/sdk v0.0.0
 	github.com/vishvananda/netlink v1.3.1 // indirect
 	github.com/vishvananda/netns v0.0.5 // indirect
 	github.com/wlynxg/anet v0.0.5 // indirect
@@ -131,7 +131,7 @@ require (
 	github.com/xtls/xray-core v1.260327.1-0.20260728075948-5ca6f4b7d4dc // indirect
 	go4.org/netipx v0.0.0-20231129151722-fdeea329fbba // indirect
 	golang.org/x/crypto v0.55.0 // indirect
-	golang.org/x/exp v0.0.0-20260611194520-c48552f49976 // indirect
+	golang.org/x/exp v0.0.0-20260727155853-b88d891fe743 // indirect
 	golang.org/x/mod v0.38.0 // indirect
 	golang.org/x/net v0.58.0 // indirect
 	golang.org/x/sync v0.22.0 // indirect
@@ -160,6 +160,9 @@ replace github.com/xtls/xray-core => ./xray-core
 replace github.com/Psiphon-Labs/psiphon-tunnel-core => ./psiphon-ios
 
 replace github.com/Psiphon-Labs/quic-go => ./psiphon-ios/vendor/github.com/Psiphon-Labs/quic-go
+
+// connect-ip-go calls http3.ParseCapsule, removed in quic-go v0.61.
+replace github.com/quic-go/quic-go => github.com/quic-go/quic-go v0.60.0
 
 replace gvisor.dev/gvisor => gvisor.dev/gvisor v0.0.0-20260909230408-9b1144b679cb
 
