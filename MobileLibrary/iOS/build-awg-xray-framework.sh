@@ -1,8 +1,11 @@
 #!/usr/bin/env bash
-# One c-archive from AWG + Xray + Psiphon + USQUE (one Go runtime).
+# One c-archive: AWG + Xray + Psiphon + USQUE + URnetwork.
+# Product name is persianray-core. The clang module stays PersianRayGo so it
+# does not collide with the Swift package PersianRayCore.
 set -euo pipefail
 
 UNITED=$(cd "$(dirname "$0")/../.." && pwd)
+bash "$UNITED/fetch-urnetwork.sh"
 AWG="$UNITED/awg-ios"
 XRAY="$UNITED/xray-core"
 LIBXRAY="$UNITED/libxray"
@@ -50,15 +53,19 @@ rm -f "$STAGE/go.mod" "$STAGE/go.sum"
 cp "$UNITED/xray_bridge.go" "$STAGE/"
 cp "$UNITED/psiphon_bridge.go" "$STAGE/"
 cp "$UNITED/usque_bridge.go" "$STAGE/"
+cp "$UNITED/urnetwork_bridge.go" "$STAGE/"
 cp "$UNITED/go.mod" "$STAGE/"
 if [ -f "$UNITED/go.sum" ]; then
   cp "$UNITED/go.sum" "$STAGE/"
 fi
+# Staged go.mod resolves ./connect-ip-go beside itself.
+cp -R "$UNITED/connect-ip-go" "$STAGE/connect-ip-go"
 
-python3 - "$STAGE/go.mod" "$AWG" "$XRAY" "$LIBXRAY" "$PSIPHON" "$USQUE" <<'PY'
+python3 - "$STAGE/go.mod" "$AWG" "$XRAY" "$LIBXRAY" "$PSIPHON" "$USQUE" "$UNITED/urnetwork" <<'PY'
 import pathlib, sys
 mod = pathlib.Path(sys.argv[1])
-awg, xray, libx, psiphon, usque = (pathlib.Path(p).resolve().as_posix() for p in sys.argv[2:])
+awg, xray, libx, psiphon, usque, urn = (pathlib.Path(p).resolve().as_posix() for p in sys.argv[2:])
+united = pathlib.Path(urn).parent.as_posix()
 text = mod.read_text(encoding="utf-8")
 repls = {
     "replace github.com/amnezia-vpn/amneziawg-go/v3 => ./awg-ios":
@@ -73,6 +80,18 @@ repls = {
         f"replace github.com/Psiphon-Labs/quic-go => {psiphon}/vendor/github.com/Psiphon-Labs/quic-go",
     "replace github.com/Diniboy1123/usque => ./usque-ios":
         f"replace github.com/Diniboy1123/usque => {usque}",
+    "replace github.com/Diniboy1123/connect-ip-go => ./connect-ip-go":
+        f"replace github.com/Diniboy1123/connect-ip-go => {united}/connect-ip-go",
+    "replace github.com/urnetwork/sdk => ./urnetwork/sdk":
+        f"replace github.com/urnetwork/sdk => {urn}/sdk",
+    "replace github.com/urnetwork/connect => ./urnetwork/connect":
+        f"replace github.com/urnetwork/connect => {urn}/connect",
+    "replace github.com/urnetwork/glog => ./urnetwork/glog":
+        f"replace github.com/urnetwork/glog => {urn}/glog",
+    "replace github.com/urnetwork/goidenticons => ./urnetwork/goidenticons":
+        f"replace github.com/urnetwork/goidenticons => {urn}/goidenticons",
+    "replace github.com/pion/sctp => ./urnetwork/connect/sctp":
+        f"replace github.com/pion/sctp => {urn}/connect/sctp",
 }
 for old, new in repls.items():
     if old not in text:
@@ -102,7 +121,7 @@ build_one() {
     CGO_CFLAGS="-isysroot $sysroot $minflag -arch $arch" \
     CGO_LDFLAGS="-isysroot $sysroot $minflag -arch $arch" \
     go build -mod=mod -tags PSIPHON_DISABLE_INPROXY -buildmode=c-archive -trimpath -ldflags "-s -w" \
-      -o "$dir/libawgxray.a" .
+      -o "$dir/libpersianraycore.a" .
 }
 
 build_one iphoneos arm64 "$OUT/ios-arm64" "-miphoneos-version-min=$MIN"
@@ -112,6 +131,7 @@ install_headers() {
   local dest="$1/Headers"
   mkdir -p "$dest"
   cp "$UNITED/include/libawgxray.h" "$dest/"
+  cp "$UNITED/include/liburnetwork.h" "$dest/"
   cp "$UNITED/include/libawg.h" "$dest/"
   cp "$UNITED/include/libxray.h" "$dest/"
   cp "$UNITED/include/libusque.h" "$dest/"
@@ -122,9 +142,9 @@ install_headers "$OUT/ios-arm64"
 install_headers "$OUT/ios-arm64-simulator"
 
 xcodebuild -create-xcframework \
-  -library "$OUT/ios-arm64/libawgxray.a" -headers "$OUT/ios-arm64/Headers" \
-  -library "$OUT/ios-arm64-simulator/libawgxray.a" -headers "$OUT/ios-arm64-simulator/Headers" \
-  -output "$OUT/AwgXray.xcframework"
+  -library "$OUT/ios-arm64/libpersianraycore.a" -headers "$OUT/ios-arm64/Headers" \
+  -library "$OUT/ios-arm64-simulator/libpersianraycore.a" -headers "$OUT/ios-arm64-simulator/Headers" \
+  -output "$OUT/persianray-core.xcframework"
 
-echo "==> $OUT/AwgXray.xcframework"
-echo "Copy to persianray-ios/Vendor/AwgXray/AwgXray.xcframework and set useUnitedAwgXray = true"
+echo "==> $OUT/persianray-core.xcframework"
+echo "Copy to persianray-ios/Vendor/persianray-core/persianray-core.xcframework"
