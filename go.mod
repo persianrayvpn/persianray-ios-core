@@ -76,7 +76,7 @@ require (
 	github.com/pion/transport/v2 v2.2.3 // indirect
 	github.com/pion/turn/v4 v4.1.4 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
-	github.com/quic-go/quic-go v0.60.0 // indirect
+	github.com/quic-go/quic-go v0.61.0 // indirect
 	github.com/refraction-networking/conjure v0.7.11-0.20240130155008-c8df96195ab2 // indirect
 	github.com/refraction-networking/ed25519 v0.1.2 // indirect
 	github.com/refraction-networking/gotapdance v1.7.10 // indirect
@@ -90,6 +90,7 @@ require (
 	github.com/tailscale/netlink v1.1.1-0.20211101221916-cabfb018fe85 // indirect
 	github.com/txthinking/runnergroup v0.0.0-20250224021307-5864ffeb65ae // indirect
 	github.com/txthinking/socks5 v0.0.0-20260601051520-339b044ab0eb // indirect
+	github.com/urnetwork/connect v0.0.0 // indirect
 	github.com/wader/filtertransport v0.0.0-20200316221534-bdd9e61eee78 // indirect
 	github.com/x448/float16 v0.8.4 // indirect
 	github.com/yosida95/uritemplate/v3 v3.0.2 // indirect
@@ -161,8 +162,7 @@ replace github.com/Psiphon-Labs/psiphon-tunnel-core => ./psiphon-ios
 
 replace github.com/Psiphon-Labs/quic-go => ./psiphon-ios/vendor/github.com/Psiphon-Labs/quic-go
 
-// connect-ip-go calls http3.ParseCapsule, removed in quic-go v0.61.
-replace github.com/quic-go/quic-go => github.com/quic-go/quic-go v0.60.0
+replace github.com/Diniboy1123/connect-ip-go => ./connect-ip-go
 
 replace gvisor.dev/gvisor => gvisor.dev/gvisor v0.0.0-20260909230408-9b1144b679cb
 
