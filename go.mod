@@ -147,7 +147,7 @@ require (
 	google.golang.org/protobuf v1.36.12 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
-	gvisor.dev/gvisor v0.0.0-20260616165937-8e4bc62602eb // indirect
+	gvisor.dev/gvisor v0.0.0-20260909230408-9b1144b679cb // indirect
 	lukechampine.com/blake3 v1.4.1 // indirect
 )
 
@@ -161,7 +161,7 @@ replace github.com/Psiphon-Labs/psiphon-tunnel-core => ./psiphon-ios
 
 replace github.com/Psiphon-Labs/quic-go => ./psiphon-ios/vendor/github.com/Psiphon-Labs/quic-go
 
-replace gvisor.dev/gvisor => gvisor.dev/gvisor v0.0.0-20231202080848-1f7806d17489
+replace gvisor.dev/gvisor => gvisor.dev/gvisor v0.0.0-20260909230408-9b1144b679cb
 
 replace github.com/Diniboy1123/usque => ./usque-ios
 
