@@ -48,4 +48,23 @@ if [ ! -f "$DEST/connect/upstream_socks.go" ]; then
   apply_overlay "$DEST/connect" "$OVERLAY/connect.patch"
 fi
 cp "$OVERLAY/upstream_socks.go" "$DEST/connect/upstream_socks.go"
+
+# quic-go v0.61 removed http3.ParseCapsule. connect-ip-go still calls it.
+# Copy the module and switch that one call to CapsuleParser.Next.
+CIP_VER=v0.0.0-20260613064811-66cba32d7d33
+CIP_DST="$ROOT/connect-ip-go"
+CIP_SRC=$(go mod download -json "github.com/Diniboy1123/connect-ip-go@${CIP_VER}" | python3 -c 'import json,sys; print(json.load(sys.stdin)["Dir"])')
+rm -rf "$CIP_DST"
+cp -R "$CIP_SRC" "$CIP_DST"
+chmod -R u+w "$CIP_DST"
+python3 - "$CIP_DST/conn.go" <<'PY'
+import pathlib, sys
+path = pathlib.Path(sys.argv[1])
+text = path.read_text(encoding="utf-8")
+old = "\tr := quicvarint.NewReader(c.str)\n\tfor {\n\t\tt, cr, err := http3.ParseCapsule(r)\n"
+new = "\tparser := http3.NewCapsuleParser(c.str)\n\tfor {\n\t\tt, cr, err := parser.Next()\n"
+if old not in text:
+    raise SystemExit("connect-ip-go conn.go no longer matches the ParseCapsule patch")
+path.write_text(text.replace(old, new, 1), encoding="utf-8")
+PY
 echo "==> urnetwork sources at $DEST"
