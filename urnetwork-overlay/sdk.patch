@@ -1,4 +1,4 @@
-﻿diff --git a/sdk.go b/sdk.go
+diff --git a/sdk.go b/sdk.go
 index f18dcbe..2a388ee 100644
 --- a/sdk.go
 +++ b/sdk.go
