@@ -31,11 +31,21 @@ fetch_sha https://github.com/urnetwork/connect.git "$CONNECT_SHA" "$DEST/connect
 fetch_sha https://github.com/urnetwork/glog.git "$GLOG_SHA" "$DEST/glog"
 fetch_sha https://github.com/urnetwork/goidenticons.git "$ICONS_SHA" "$DEST/goidenticons"
 
+# macOS BSD patch rejects these hunks when the file has a UTF-8 BOM or CR.
+# git apply accepts the same diff after that noise is stripped.
+apply_overlay() {
+  local dir="$1" src="$2" normalized
+  normalized=$(mktemp)
+  perl -pe 's/^\xEF\xBB\xBF//; s/\r$//' "$src" > "$normalized"
+  git -C "$dir" apply --whitespace=nowarn "$normalized"
+  rm -f "$normalized"
+}
+
 if ! grep -q 'func SetUpstreamSocks' "$DEST/sdk/sdk.go"; then
-  patch -p1 -d "$DEST/sdk" < "$OVERLAY/sdk.patch"
+  apply_overlay "$DEST/sdk" "$OVERLAY/sdk.patch"
 fi
 if [ ! -f "$DEST/connect/upstream_socks.go" ]; then
-  patch -p1 -d "$DEST/connect" < "$OVERLAY/connect.patch"
+  apply_overlay "$DEST/connect" "$OVERLAY/connect.patch"
 fi
 cp "$OVERLAY/upstream_socks.go" "$DEST/connect/upstream_socks.go"
 echo "==> urnetwork sources at $DEST"
