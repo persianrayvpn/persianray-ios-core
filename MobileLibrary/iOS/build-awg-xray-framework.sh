@@ -53,15 +53,16 @@ rm -f "$STAGE/go.mod" "$STAGE/go.sum"
 cp "$UNITED/xray_bridge.go" "$STAGE/"
 cp "$UNITED/psiphon_bridge.go" "$STAGE/"
 cp "$UNITED/usque_bridge.go" "$STAGE/"
+cp "$UNITED/urnetwork_bridge.go" "$STAGE/"
 cp "$UNITED/go.mod" "$STAGE/"
 if [ -f "$UNITED/go.sum" ]; then
   cp "$UNITED/go.sum" "$STAGE/"
 fi
 
-python3 - "$STAGE/go.mod" "$AWG" "$XRAY" "$LIBXRAY" "$PSIPHON" "$USQUE" <<'PY'
+python3 - "$STAGE/go.mod" "$AWG" "$XRAY" "$LIBXRAY" "$PSIPHON" "$USQUE" "$UNITED/urnetwork" <<'PY'
 import pathlib, sys
 mod = pathlib.Path(sys.argv[1])
-awg, xray, libx, psiphon, usque = (pathlib.Path(p).resolve().as_posix() for p in sys.argv[2:])
+awg, xray, libx, psiphon, usque, urn = (pathlib.Path(p).resolve().as_posix() for p in sys.argv[2:])
 text = mod.read_text(encoding="utf-8")
 repls = {
     "replace github.com/amnezia-vpn/amneziawg-go/v3 => ./awg-ios":
@@ -76,6 +77,16 @@ repls = {
         f"replace github.com/Psiphon-Labs/quic-go => {psiphon}/vendor/github.com/Psiphon-Labs/quic-go",
     "replace github.com/Diniboy1123/usque => ./usque-ios":
         f"replace github.com/Diniboy1123/usque => {usque}",
+    "replace github.com/urnetwork/sdk => ./urnetwork/sdk":
+        f"replace github.com/urnetwork/sdk => {urn}/sdk",
+    "replace github.com/urnetwork/connect => ./urnetwork/connect":
+        f"replace github.com/urnetwork/connect => {urn}/connect",
+    "replace github.com/urnetwork/glog => ./urnetwork/glog":
+        f"replace github.com/urnetwork/glog => {urn}/glog",
+    "replace github.com/urnetwork/goidenticons => ./urnetwork/goidenticons":
+        f"replace github.com/urnetwork/goidenticons => {urn}/goidenticons",
+    "replace github.com/pion/sctp => ./urnetwork/connect/sctp":
+        f"replace github.com/pion/sctp => {urn}/connect/sctp",
 }
 for old, new in repls.items():
     if old not in text:
