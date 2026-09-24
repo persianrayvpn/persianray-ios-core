@@ -1,4 +1,4 @@
-﻿diff --git a/net.go b/net.go
+diff --git a/net.go b/net.go
 index 7206f58..257d3c4 100644
 --- a/net.go
 +++ b/net.go
